@@ -72,7 +72,7 @@ module.exports = (app) => {
 	});
 
 	app.put("/article/:id", (request, response)=> {
-		let id = req.params.id;
+		let id = request.params.id;
 		db.Article.findByIdAndUpdate(id, {$set: {clipped: true}})
 		.then((articledb) => {
 			response.json(articledb);
@@ -81,9 +81,9 @@ module.exports = (app) => {
 		});
 	});
 
-	app.put("article/delete/:id", (request, response) =>{
-		let id = req.params.id;	
-		db.Article.findByIdAndUpdate(id, {$set: {clipped:false}})
+	app.put("article/remove/:id", (request, response) =>{
+		let id = request.params.id;	
+		db.Article.findByIdAndUpdate(id, {$set: {clipped: false}})
 		.then((articledb) => {
 			response.json(articledb);
 		}).catch((error) => {
@@ -92,7 +92,7 @@ module.exports = (app) => {
 	});
 
 	app.get("article/:id", (request, response) => {
-		let id = req.params.id;
+		let id = request.params.id;
 		db.Article.findById(id)
 		.populate("note")
 		.then((articledb) => {
@@ -103,8 +103,8 @@ module.exports = (app) => {
 	});
 
 	app.post("/note/:id", (request, response) => {
-		let id = req.params.id;
-		db.Note.create(req.body)
+		let id = request.params.id;
+		db.Note.create(request.body)
 		.then((notedb) => {
 			return db.Article.findOneAndUpdate(
 			{
@@ -125,8 +125,8 @@ module.exports = (app) => {
 		});
 	});
 
-	app.delete("/note:id", (request, response) => {
-		let id = req.params.id;
+	app.delete("/note/:id", (request, response) => {
+		let id = request.params.id;
 		db.Note.remove({_id: id})
 		.then((notedb) => {
 			response.json({message: "note deleted."});

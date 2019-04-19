@@ -23,7 +23,7 @@ $(()=>{
         let id = $(this).data('id');
         
         $.ajax({
-            url: `/article/delete/${id}`,
+            url: `/article/remove/${id}`,
             method: 'PUT'
         })
         .then((data)=>{
@@ -36,7 +36,7 @@ $(()=>{
 
         // send request to get article's notes if exist
         $.ajax({
-            url: `/article/${articleId}`,
+            url: `/articles/${articleId}`,
             method: 'GET'
         })
         .then((data)=>{
@@ -89,7 +89,7 @@ $(()=>{
 
         if (content) {
             $.ajax({
-                url: `/note/${id}`,
+                url: `/notes/${id}`,
                 method: 'POST',
                 data: {body: content}
             })
@@ -110,7 +110,7 @@ $(()=>{
         let id = $(this).data('id');
 
         $.ajax({
-            url: `/note/${id}`,
+            url: `/notes/${id}`,
             method: 'DELETE'
         })
         .then((data)=>{
@@ -130,7 +130,7 @@ $(()=>{
 
     // click events
     $('.scraper').on('click', scrapeArticles);
-    $('.save-button').on('click', saveArticle);
+    $('.clip-button').on('click', saveArticle);
     $('.delete-button').on('click', removeArticle);
     $('.notes-button').on('click', viewNotes);
     // handle click events for elements created dynamically
