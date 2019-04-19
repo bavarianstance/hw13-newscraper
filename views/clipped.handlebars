@@ -1,0 +1,24 @@
+<div class="container">
+	{{#each article}}
+		<div class="card">
+			<h4 class="card-header">{{this.title}}</h4>
+				<div class="row">
+					<div class="col-lg-8 card-block">
+						<p class="card-text">{{this.boilerplate}}</p>
+						<a href="{{this.link}}" target="_blank" class="card-link">See Full Article</a>
+					</div>
+					<div class="col-lg-4 align-self-end text-right">
+						<button class="btn btn-warning m-2 delete-button" data-id="{{this._id}}">Delete</button>
+						<button class="btn btn-primary m-2 notes-button">Notes</button>
+					</div>
+				</div>
+		</div>
+		{{/each}}
+</div>
+
+<div class="modal fade">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+		</div>
+	</div>
+</div>

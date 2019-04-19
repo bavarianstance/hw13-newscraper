@@ -1,0 +1,20 @@
+<div class="container">
+	{{#each article}}
+	<div class="card">
+		<h4 class="card-header">{{this.title}}</h4>
+		<div class="row">
+			<div class="col-lg-9 card-block">
+				<p class="card-text">{{this.boilerplate}}</p>
+				<a href="{{this.link}}" target="_blank" class="card-link">See Full Article</a>
+			</div>
+			<div class="col-lg-4 align-self-end text-right">
+				{{#if clipped}}
+					<button class="btn btn-light m-2 disabled">Article Clipped</button>
+				{{else}}
+					<button class="btn btn-info m-2 clip-button" data-id="{{this._id}}">Clip Article</button>
+				{{/if}}		
+			</div>
+		</div>
+	</div>
+	{{/each}}
+</div>
