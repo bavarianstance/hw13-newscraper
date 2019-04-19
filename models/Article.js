@@ -18,10 +18,15 @@ const ArticleSchema = new Schema({
     required: true,
     unique: true
   },
-  boilplate: {
+  boilerplate: {
     type: String,
     required: true,
     unique: true
+  },
+  author: {
+    type: String,
+    required: true,
+    unique:true
   },
   timestamp: {
     type: Date,
