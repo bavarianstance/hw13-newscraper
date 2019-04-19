@@ -9,8 +9,15 @@ i {
 
 .title {
 	color:white;
+	   text-shadow: 2px 2px black;
 }
 
 .subtitle {
 	color:white;
+	   text-shadow: 2px 2px black;
+}
+
+img {
+   padding:1px;
+   border:1px solid #021a40;
 }
