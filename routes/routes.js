@@ -57,6 +57,81 @@ module.exports = (app) => {
 			response.redirect("/articles");
 		}).catch((error) => {
 			console.log(`\n url get throw err: ${error}`);
-		})
-	})
+		});
+	});
+
+	app.get("/articles", (request, response) => {
+		db.Article.find({})
+		.sort({ timestamp: -1 })
+		.then((articledb) => {
+			let artObj = {article: articledb};
+			response.render("index", artObj);
+		}).catch((error) => {
+			response.json(error);
+		});
+	});
+
+	app.put("/article/:id", (request, response)=> {
+		let id = req.params.id;
+		db.Article.findByIdAndUpdate(id, {$set: {clipped: true}})
+		.then((articledb) => {
+			response.json(articledb);
+		}).catch((error) => {
+			response.json(error);
+		});
+	});
+
+	app.put("article/delete/:id", (request, response) =>{
+		let id = req.params.id;	
+		db.Article.findByIdAndUpdate(id, {$set: {clipped:false}})
+		.then((articledb) => {
+			response.json(articledb);
+		}).catch((error) => {
+			response.json(error);
+		});
+	});
+
+	app.get("article/:id", (request, response) => {
+		let id = req.params.id;
+		db.Article.findById(id)
+		.populate("note")
+		.then((articledb) => {
+			response.json(articledb);
+		}).catch((error) => {
+			response.json(error);
+		});
+	});
+
+	app.post("/note/:id", (request, response) => {
+		let id = req.params.id;
+		db.Note.create(req.body)
+		.then((notedb) => {
+			return db.Article.findOneAndUpdate(
+			{
+				_id: id
+			},
+			{
+				$push: {
+					note: notedb._id
+				}
+			}, 
+			{
+				new: true, upsert: true
+			});
+		}).then((articledb) => {
+			response.json(articledb);
+		}).catch((error) => {
+			response.json(error);
+		});
+	});
+
+	app.delete("/note:id", (request, response) => {
+		let id = req.params.id;
+		db.Note.remove({_id: id})
+		.then((notedb) => {
+			response.json({message: "note deleted."});
+		}).catch((error) => {
+			response.json(error);
+		});
+	});
 }
