@@ -1,6 +1,6 @@
 // $(()=>{
     // declare functions
-    const scrapeArticles = ()=>{
+    let scrapeArticles = () =>{
         $.get('/scraper')
         .then((data)=>{
             $('body').html(data);
