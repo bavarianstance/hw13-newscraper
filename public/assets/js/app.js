@@ -5,6 +5,7 @@
         .then((data)=>{
             // was causing redeclaration error
             // $('body').html(data);
+            location.reload();
         });
     };
 
