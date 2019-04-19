@@ -1,4 +1,4 @@
-$(()=>{
+// $(()=>{
     // declare functions
     const scrapeArticles = ()=>{
         $.get('/scraper')
@@ -36,44 +36,70 @@ $(()=>{
 
         // send request to get article's notes if exist
         $.ajax({
-            url: `/articles/${articleId}`,
+            url: `/article/${articleId}`,
             method: 'GET'
         })
         .then((data)=>{
             // create modal with article id
-            $('.modal-content').html(`
-                <div class="modal-header">
-                    <h5 class="modal-title">${data.title}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            // $('.modal-content').html(`
+            //     <div class="modal-header">
+            //         <h5 class="modal-title">${data.title}</h5>
+            //         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            //         <span aria-hidden="true">&times;</span>
+            //         </button>
+            //     </div>
+            //     <div class="modal-body">
+            //         <ul class="list-group"></ul>
+            //         <textarea name="note" class="note-content"></textarea>
+            //     </div>
+            //     <div class="modal-footer">
+            //         <button type="button" data-id="${data._id}" class="btn btn-primary btn-save-note">Save Note</button>
+            //         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            //     </div>`
+            // );
+            $(".modal-content").html(`
+                <div class="modal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                     <div class="modal-header">
+                      <h5 class="modal-title">${data.title}</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <ul class="list-group"></ul>
-                    <textarea name="note" class="note-content"></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" data-id="${data._id}" class="btn btn-primary btn-save-note">Save Note</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>`
-            );
+              </button>
+              </div>
+      <div class="modal-body">
+        <ul class="list-group"></ul>
+        <textarea id="add-note" class="form-control note-content" placeholder="enter your note here..."></textarea>
+      </div>
+          <div class="modal-footer">
+        <button type="button" data-id="${data._id}" class="btn btn-primary btn-save-note">Save Note</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+`);
 
-            let totalNotes = data.note.length;
+            console.log(data);
+            console.log(data.note);
+            let notes = data.note;
+            // let totalNotes = notes.length
 
             // if there is no note
-            if (totalNotes == 0) {
-                let message = `<small class="text-muted">This article doesn't have any note yet.</small>`;
+            if (notes.length === 0) {
+                let message = `<small class="text-muted">This article doesn't have any note(s) yet.</small>`;
                 $('.modal-body').prepend(message);
             }
             // if there is/are note(s)
             else {
-                let notes = data.note;
+                // let notes = [1,2,3,4,5]
+                console.log(notes);
                 // loop through notes and append to modal
                 notes.forEach(note =>{
                     $('.list-group').append(`
                         <li class="list-group-item justify-content-between">
                             ${note.body}
-                            <span><i class="material-icons" data-id="${note._id}">delete_forever</i></span>
+                            <span><i class="fas fa-trash-alt" data-id="${note._id}"></i></span>
                         </li>
                     `);
                 });
@@ -89,7 +115,7 @@ $(()=>{
 
         if (content) {
             $.ajax({
-                url: `/notes/${id}`,
+                url: `/note/${id}`,
                 method: 'POST',
                 data: {body: content}
             })
@@ -110,7 +136,7 @@ $(()=>{
         let id = $(this).data('id');
 
         $.ajax({
-            url: `/notes/${id}`,
+            url: `/note/${id}`,
             method: 'DELETE'
         })
         .then((data)=>{
@@ -119,8 +145,8 @@ $(()=>{
         });
     };
 
-    // hide scrape button if on page 'saved'
-    if (window.location.href.includes('saved')) {
+    // hide scrape button if on page 'clipped'
+    if (window.location.href.includes('clipped')) {
         $('.scraper').hide();
     }
 
@@ -135,5 +161,5 @@ $(()=>{
     $('.notes-button').on('click', viewNotes);
     // handle click events for elements created dynamically
     $(document).on('click', '.btn-save-note', saveNote);
-    $(document).on('click', '.material-icons', deleteNote);
-});
+    $(document).on('click', '.fa-trash-alt', deleteNote);
+// });

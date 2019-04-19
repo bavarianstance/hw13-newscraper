@@ -81,7 +81,7 @@ module.exports = (app) => {
 		});
 	});
 
-	app.put("article/remove/:id", (request, response) =>{
+	app.put("/article/remove/:id", (request, response) =>{
 		let id = request.params.id;	
 		db.Article.findByIdAndUpdate(id, {$set: {clipped: false}})
 		.then((articledb) => {
@@ -91,9 +91,10 @@ module.exports = (app) => {
 		});
 	});
 
-	app.get("article/:id", (request, response) => {
-		let id = request.params.id;
-		db.Article.findById(id)
+	app.get("/article/:id", (request, response) => {
+		// let id = request.params.id;
+		// db.Article.findById(_id)
+		db.Article.findOne({ _id: request.params.id })
 		.populate("note")
 		.then((articledb) => {
 			response.json(articledb);
@@ -106,18 +107,19 @@ module.exports = (app) => {
 		let id = request.params.id;
 		db.Note.create(request.body)
 		.then((notedb) => {
-			return db.Article.findOneAndUpdate(
-			{
-				_id: id
-			},
-			{
-				$push: {
-					note: notedb._id
-				}
-			}, 
-			{
-				new: true, upsert: true
-			});
+			return db.Article.findOneAndUpdate({ _id: request.params.id}, {$push: { note: notedb._id }}, { new: true, upsert: true})
+			// return db.Article.findOneAndUpdate(
+			// {
+			// 	_id: id
+			// },
+			// {
+			// 	$push: {
+			// 		note: notedb._id
+			// 	}
+			// }, 
+			// {
+			// 	new: true, upsert: true
+			// });
 		}).then((articledb) => {
 			response.json(articledb);
 		}).catch((error) => {
