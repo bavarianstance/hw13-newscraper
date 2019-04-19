@@ -8,7 +8,7 @@ module.exports = (app) => {
 		// query MongoDB to find all articles
 		db.Article.find({})
 		.sort({timestamp: -1}).then((articledb) => {
-			if (dbArticle.length === 0) {
+			if (articledb.length === 0) {
 				console.log("DB empty. Try scraping again.");
 				response.render("index");
 			} else {
@@ -39,8 +39,8 @@ module.exports = (app) => {
 				let resObj = {};
 				const title = $(this).children("header").children("h1").children("a").text();
 				const link = $(this).children("header").children("h1").children("a").attr("href");
-				const boilerplate = $(this).children("div").children("p").text();
-				const author = $(this).children("header").children("div").children("a").text();
+				const boilerplate = $(this).children("div.item__content").children("div.entry-summary").children("p").text();
+				const author = $(this).children("header").children("div").children("div").children("div").children("a").text();
 
 				resObj.title = title;
 				resObj.link = link;
