@@ -1,9 +1,10 @@
 // $(()=>{
     // declare functions
-    let scrapeArticles = () =>{
+    const scrapeArticles = () =>{
         $.get('/scraper')
         .then((data)=>{
-            $('body').html(data);
+            // was causing redeclaration error
+            // $('body').html(data);
         });
     };
 
@@ -34,29 +35,13 @@
     const viewNotes = function() {
         let articleId = $(this).data('id');
 
-        // send request to get article's notes if exist
+
         $.ajax({
             url: `/article/${articleId}`,
             method: 'GET'
         })
         .then((data)=>{
-            // create modal with article id
-            // $('.modal-content').html(`
-            //     <div class="modal-header">
-            //         <h5 class="modal-title">${data.title}</h5>
-            //         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            //         <span aria-hidden="true">&times;</span>
-            //         </button>
-            //     </div>
-            //     <div class="modal-body">
-            //         <ul class="list-group"></ul>
-            //         <textarea name="note" class="note-content"></textarea>
-            //     </div>
-            //     <div class="modal-footer">
-            //         <button type="button" data-id="${data._id}" class="btn btn-primary btn-save-note">Save Note</button>
-            //         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            //     </div>`
-            // );
+
             $(".modal-content").html(`
                 <div class="modal" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
@@ -80,19 +65,16 @@
 </div>
 `);
 
-            console.log(data);
-            console.log(data.note);
+            // console.log(data);
+            // console.log(data.note);
             let notes = data.note;
-            // let totalNotes = notes.length
 
-            // if there is no note
+
             if (notes.length === 0) {
                 let message = `<small class="text-muted">This article doesn't have any note(s) yet.</small>`;
                 $('.modal-body').prepend(message);
             }
-            // if there is/are note(s)
             else {
-                // let notes = [1,2,3,4,5]
                 console.log(notes);
                 // loop through notes and append to modal
                 notes.forEach(note =>{
