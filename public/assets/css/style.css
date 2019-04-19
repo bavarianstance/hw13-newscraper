@@ -1,0 +1,16 @@
+i { 
+	cursor: pointer; 
+}
+
+.jumbotron {
+  background-image: url("../img/m5.jpg");
+  background-size: cover;
+}
+
+.title {
+	color:white;
+}
+
+.subtitle {
+	color:white;
+}

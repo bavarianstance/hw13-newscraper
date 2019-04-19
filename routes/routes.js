@@ -41,11 +41,13 @@ module.exports = (app) => {
 				const link = $(this).children("header").children("h1").children("a").attr("href");
 				const boilerplate = $(this).children("div.item__content").children("div.entry-summary").children("p").text();
 				const author = $(this).children("header").children("div").children("div").children("div").children("a").text();
-
+				const pic = $(this).children("div.item__content").children("figure").children("a").children("div").children("picture").children("source").attr("data-srcset");
+				
 				resObj.title = title;
 				resObj.link = link;
 				resObj.boilerplate = boilerplate;
 				resObj.author = author;
+				resObj.pic = pic;
 
 				db.Article.create(resObj)
 				.then((articledb) => {
@@ -108,18 +110,6 @@ module.exports = (app) => {
 		db.Note.create(request.body)
 		.then((notedb) => {
 			return db.Article.findOneAndUpdate({ _id: request.params.id}, {$push: { note: notedb._id }}, { new: true, upsert: true})
-			// return db.Article.findOneAndUpdate(
-			// {
-			// 	_id: id
-			// },
-			// {
-			// 	$push: {
-			// 		note: notedb._id
-			// 	}
-			// }, 
-			// {
-			// 	new: true, upsert: true
-			// });
 		}).then((articledb) => {
 			response.json(articledb);
 		}).catch((error) => {

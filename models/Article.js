@@ -36,6 +36,11 @@ const ArticleSchema = new Schema({
     type: Boolean,
     default: false
   },
+  pic: {
+    type: String,
+    required: true,
+    unique: true
+  },
   // `note` is an object that stores a Note id
   // The ref property links the ObjectId to the Note model
   // This allows us to populate the Article with an associated Note
