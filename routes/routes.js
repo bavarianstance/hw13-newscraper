@@ -1,3 +1,4 @@
+// init npm pkgs
 const db = require("../models");
 const axios = require("axios");
 const cheerio = require("cheerio");
@@ -20,6 +21,7 @@ module.exports = (app) => {
 		});
 	});
 
+// get all clipped articles
 	app.get("/clipped", (request, response) => {
 		db.Article.find({ clipped:true })
 		.then((articledb) => {
@@ -29,10 +31,11 @@ module.exports = (app) => {
 			response.json(error);
 		}); 
 	});
-
+// scraper route and logic to capture values
 	app.get("/scraper", (request, response)=> {
 		axios.get("https://jalopnik.com/")
 		.then((result)=> {
+			// init cheerio load data from result object
 			let $ = cheerio.load(result.data);
 
 			$(".post-item-frontpage").each(function(i, element){
@@ -56,23 +59,27 @@ module.exports = (app) => {
 					console.log(`\n db save throw err: ${err}`);
 				});
 			});
+			// redirect to appropriate route
 			response.redirect("/articles");
+			// error handling
 		}).catch((error) => {
 			console.log(`\n url get throw err: ${error}`);
 		});
 	});
-
+// primary route to list main index
 	app.get("/articles", (request, response) => {
 		db.Article.find({})
 		.sort({ timestamp: -1 })
 		.then((articledb) => {
 			let artObj = {article: articledb};
 			response.render("index", artObj);
+			// error handling
 		}).catch((error) => {
 			response.json(error);
 		});
 	});
 
+// update route for onclick to set clipped to true for saved articles
 	app.put("/article/:id", (request, response)=> {
 		let id = request.params.id;
 		db.Article.findByIdAndUpdate(id, {$set: {clipped: true}})
@@ -83,6 +90,7 @@ module.exports = (app) => {
 		});
 	});
 
+// update route for deleting clipped articles
 	app.put("/article/remove/:id", (request, response) =>{
 		let id = request.params.id;	
 		db.Article.findByIdAndUpdate(id, {$set: {clipped: false}})
@@ -93,9 +101,8 @@ module.exports = (app) => {
 		});
 	});
 
+// route to populate notes by article id in db
 	app.get("/article/:id", (request, response) => {
-		// let id = request.params.id;
-		// db.Article.findById(_id)
 		db.Article.findOne({ _id: request.params.id })
 		.populate("note")
 		.then((articledb) => {
@@ -104,7 +111,7 @@ module.exports = (app) => {
 			response.json(error);
 		});
 	});
-
+// route to create new note associated by article
 	app.post("/note/:id", (request, response) => {
 		let id = request.params.id;
 		db.Note.create(request.body)
@@ -116,7 +123,7 @@ module.exports = (app) => {
 			response.json(error);
 		});
 	});
-
+// route to delete a note associated to specific article
 	app.delete("/note/:id", (request, response) => {
 		let id = request.params.id;
 		db.Note.remove({_id: id})

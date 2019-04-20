@@ -1,14 +1,15 @@
-// $(()=>{
-    // declare functions
+// init fcns
+
+// scrape article fcn
     const scrapeArticles = () =>{
         $.get('/scraper')
         .then((data)=>{
-            // was causing redeclaration error
             // $('body').html(data);
             location.reload();
         });
     };
 
+// clip article fcn
     const saveArticle = function() {
         let id = $(this).data('id');
 
@@ -20,7 +21,7 @@
             location.reload();
         });
     };
-
+// delete article fcn
     const removeArticle = function() {
         let id = $(this).data('id');
         
@@ -32,7 +33,7 @@
             location.reload();
         });
     };
-
+// see notes fcn
     const viewNotes = function() {
         let articleId = $(this).data('id');
 
@@ -42,7 +43,7 @@
             method: 'GET'
         })
         .then((data)=>{
-
+// init modal for notes feature
             $(".modal-content").html(`
                 <div class="modal" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
@@ -68,17 +69,17 @@
 
             // console.log(data);
             // console.log(data.note);
+            // assign notes object array to notes var
             let notes = data.note;
-
-
+            // logic to determine if notes is empty
             if (notes.length === 0) {
-                let message = `<small class="text-muted">This article doesn't have any note(s) yet.</small>`;
+                let message = `<small class="text-muted">Whoops, no notes found. Try adding some.</small>`;
                 $('.modal-body').prepend(message);
             }
             else {
                 console.log(notes);
-                // loop through notes and append to modal
-                notes.forEach(note =>{
+                // iterates thru notes object and appends each to modal
+                    notes.forEach(note =>{
                     $('.list-group').append(`
                         <li class="list-group-item justify-content-between">
                             ${note.body}
@@ -87,15 +88,16 @@
                     `);
                 });
             }
-            
+            // init modal view
             $('.modal').modal('show');
         });
     };
-
+// save note fcn
     const saveNote = function() {
+        // grabs associated data 
         let id = $(this).data('id');
         let content = $('.note-content').val().trim();
-
+        // logic for ajax call
         if (content) {
             $.ajax({
                 url: `/note/${id}`,
@@ -103,9 +105,8 @@
                 data: {body: content}
             })
             .then((data)=>{
-                // clear textarea
+                // logic after promise function to capture inputs for notes
                 $('.note-content').val('');
-                // hide modal
                 $('.modal').modal('hide');
             });
         }
@@ -115,34 +116,34 @@
         }
     };
 
+// delete note function
     const deleteNote = function() {
         let id = $(this).data('id');
-
+        // ajax call for delete in db
         $.ajax({
             url: `/note/${id}`,
             method: 'DELETE'
         })
         .then((data)=>{
-            // hide modal
+            // promise execution logic for hiding modal
             $('.modal').modal('hide');
         });
     };
 
-    // hide scrape button if on page 'clipped'
+// logic to hide scraper button if on clipped articles page
     if (window.location.href.includes('clipped')) {
         $('.scraper').hide();
     }
 
-    // keep scrollbar bottom
+// keeps contentbox pinned for best viewing
     const contentBox = $('.note-content');
     contentBox.scrollTop = contentBox.scrollHeight;
 
-    // click events
+// on click event listeners
     $('.scraper').on('click', scrapeArticles);
     $('.clip-button').on('click', saveArticle);
     $('.delete-button').on('click', removeArticle);
     $('.notes-button').on('click', viewNotes);
-    // handle click events for elements created dynamically
+// click event listeners for dynamically generated elements
     $(document).on('click', '.btn-save-note', saveNote);
     $(document).on('click', '.fa-trash-alt', deleteNote);
-// });
