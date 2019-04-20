@@ -10,10 +10,10 @@
 
 ### App Screenshots
 * Main Page
-![homepage](./imgs/screenshot1.png "Home Page")
+![homepage](./public/assets/imgs/screenshot1.png "Home Page")
 
 * Notes Feature on Clipped Articles
-![survey](./imgs/screenshot2.png "Survey")
+![survey](./public/assets/imgs/screenshot2.png "Survey")
 
 ### Technologies Used
 * Node.JS 
