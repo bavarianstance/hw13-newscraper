@@ -1,8 +1,8 @@
 # HW13 | MongoDB Web Scraper
 
 ## Link to Live Deployed Page on Heroku
-[Heroku Deployed App](https://aqueous-reaches-34767.herokuapp.com/
-)
+[Heroku Deployed App](https://aqueous-reaches-34767.herokuapp.com/)
+
 ## Installation/Usage
 * npm-install for initial download of dependent packages
 * node server.js to init server
@@ -10,10 +10,10 @@
 
 ### App Screenshots
 * Main Page
-![homepage](/public/assets/imgs/screenshot1.png "Home Page")
+![homepage](./public/assets/img/screenshot1.png "Home Page")
 
 * Notes Feature on Clipped Articles
-![notes](/public/assets/imgs/screenshot2.png "notes")
+![notes](./public/assets/img/screenshot2.png "notes")
 
 ### Technologies Used
 * Node.JS 
